@@ -1,5 +1,5 @@
 
-import axios from "axios";
+import api from "../../api/axios.js";
 import { useState } from "react";
 import formatMoney from "../../utilis/Money.js";
 
@@ -11,10 +11,28 @@ function Product({
 }) {
   const [quantity, setQuantity] = useState(1);
 
+  const backendURL =
+    import.meta.env.VITE_API_URL || "";
+
+  // Handle backend images and local development
+  const getImageUrl = (image) => {
+    if (!image) return "";
+
+    if (image.startsWith("http")) {
+      return image;
+    }
+
+    const path = image.startsWith("/")
+      ? image
+      : `/${image}`;
+
+    return `${backendURL}${path}`;
+  };
+
   // Add to Cart
   const addToCart = async () => {
     try {
-      await axios.post("/api/cart-items", {
+      await api.post("/api/cart-items", {
         productId: product.id,
         quantity: quantity,
       });
@@ -27,8 +45,7 @@ function Product({
 
   // Select quantity
   const selectQuantity = (event) => {
-    const quantitySelected = Number(event.target.value);
-    setQuantity(quantitySelected);
+    setQuantity(Number(event.target.value));
   };
 
   // Check if product is in wishlist
@@ -38,11 +55,10 @@ function Product({
 
   return (
     <div className="product-container">
-
       <div className="product-image-container">
         <img
           className="product-image"
-          src={product.image}
+          src={getImageUrl(product.image)}
           alt={product.name}
         />
       </div>
@@ -54,7 +70,9 @@ function Product({
       <div className="product-rating-container">
         <img
           className="product-rating-stars"
-          src={`images/ratings/rating-${product.rating.stars * 10}.png`}
+          src={getImageUrl(
+            `images/ratings/rating-${product.rating.stars * 10}.png`
+          )}
           alt="Product rating"
         />
 
@@ -83,11 +101,13 @@ function Product({
       <div className="product-spacer"></div>
 
       <div className="added-to-cart">
-        <img src="images/icons/checkmark.png" alt="" />
+        <img
+          src={getImageUrl("images/icons/checkmark.png")}
+          alt=""
+        />
         Added
       </div>
 
-      {/* Add to Cart Button */}
       <button
         className="add-to-cart-button button-primary"
         onClick={addToCart}
@@ -95,7 +115,6 @@ function Product({
         Add to Cart
       </button>
 
-      {/* Wishlist Button */}
       <button
         type="button"
         className={`wishlist-btn ${isLiked ? "active" : ""}`}
@@ -105,7 +124,6 @@ function Product({
           ? "❤️ Remove from Wishlist"
           : "🤍 Add to Wishlist"}
       </button>
-
     </div>
   );
 }

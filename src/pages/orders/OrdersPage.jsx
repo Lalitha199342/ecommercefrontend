@@ -1,4 +1,4 @@
-import axios from 'axios'
+import api from "./api/axios";
 import dayjs from 'dayjs'
 import { useState, useEffect,Fragment } from 'react';
 import formatMoney from '../../utilis/Money.js';
@@ -12,13 +12,13 @@ function OrdersPage({cart}) {
     useEffect(() => {
       const fetchOrdersData = async () => {
         
-              const response = await axios.get('/api/orders?expand=products')
+              const response = await api.get('/api/orders?expand=products')
            
               setOrders(response.data);
                 } ;
                   fetchOrdersData();  
     }, []);
-
+    
     return (
         <>  
         <title> Orders</title>

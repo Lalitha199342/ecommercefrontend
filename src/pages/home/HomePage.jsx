@@ -3,7 +3,7 @@ import "./HomePage.css";
 import Header from "../../components/Header.jsx";
 import ProductsGrid from "./ProductsGrid.jsx";
 
-import axios from "axios";
+import api from "../../api/axios";
 import { useEffect, useState } from "react";
 import { useSearch } from "../../components/SearchContext.jsx";
 
@@ -20,7 +20,7 @@ function HomePage({ cart = [], loadCart, wishlist = [], dispatch }) {
     setError("");
 
     try {
-      const response = await axios.get("/api/products");
+      const response = await api.get("/api/products");
 
       if (!Array.isArray(response.data)) {
         throw new Error("Invalid products data");
