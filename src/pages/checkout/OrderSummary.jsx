@@ -1,4 +1,5 @@
-import axios from 'axios'
+
+import api from "../../api/axios";
 import dayjs from 'dayjs';
 import formatMoney from '../../utilis/Money.js';
 import DeliveryOptions from './DeliveryOptions.jsx';
@@ -11,7 +12,7 @@ export default function OrderSummary({ cart,deliveryOptions,loadCart }) {
                         return deliveryOption.id === cartItem.deliveryOptionId;
                       });
                       const deleteCartItem = async () => {
-                        await axios.delete(`/api/cart-items/${cartItem.productId}`);
+                        await api.delete(`/api/cart-items/${cartItem.productId}`);
                         await loadCart();
                       }
                       return (

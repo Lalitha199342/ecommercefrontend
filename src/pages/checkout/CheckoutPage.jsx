@@ -1,4 +1,5 @@
-import axios from 'axios';
+
+import api from "../../api/axios";
 import { useState, useEffect } from 'react';
 
 import './CheckoutPage.css';
@@ -18,13 +19,13 @@ function CheckoutPage({ cart, loadCart }) {
         setLoading(true);
         setError('');
 
-        const deliveryResponse = await axios.get(
+        const deliveryResponse = await api.get(
           '/api/delivery-options?expand=estimatedDeliveryTime'
         );
 
         setDeliveryOptions(deliveryResponse.data);
 
-        const paymentResponse = await axios.get(
+        const paymentResponse = await api.get(
           '/api/payment-summary'
         );
 

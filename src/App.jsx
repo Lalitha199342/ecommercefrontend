@@ -1,7 +1,7 @@
 
-import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useReducer } from "react";
 import { Routes, Route } from "react-router";
+import api from "./api/axios";
 
 import HomePage from "./pages/home/HomePage";
 import CheckoutPage from "./pages/checkout/CheckoutPage.jsx";
@@ -9,50 +9,44 @@ import OrdersPage from "./pages/orders/OrdersPage.jsx";
 import Login from "./pages/Login.jsx";
 import Signup from "./pages/Signup.jsx";
 import Wishlist from "./components/Wishlist.jsx";
-import {   useReducer } from "react";
 import { wishlistReducer } from "./components/Wishlistreducer.js";
 
 import "./App.css";
 
 function App() {
   const [cart, setCart] = useState([]);
-  
-  const [products, setProducts] = useState([]);
+
   const [wishlist, dispatch] = useReducer(
-  wishlistReducer,
-  [],
-  () => {
-    try {
-      return JSON.parse(localStorage.getItem("wishlist")) || [];
-    } catch {
-      return [];
+    wishlistReducer,
+    [],
+    () => {
+      try {
+        return JSON.parse(localStorage.getItem("wishlist")) || [];
+      } catch {
+        return [];
+      }
     }
-  }
-);
+  );
 
-useEffect(() => {
-  localStorage.setItem("wishlist", JSON.stringify(wishlist));
-}, [wishlist]);
+  // Save wishlist in localStorage
+  useEffect(() => {
+    localStorage.setItem("wishlist", JSON.stringify(wishlist));
+  }, [wishlist]);
 
+  // Load cart from Render backend
   const loadCart = async () => {
-    const response = await axios.get(
-      "/api/cart-items?expand=product"
-    );
-    setCart(response.data);
-  };
-
-  const loadProducts = async () => {
     try {
-      const response = await axios.get("/api/products");
-      setProducts(response.data);
+      const response = await api.get(
+        "/api/cart-items?expand=product"
+      );
+      setCart(response.data);
     } catch (error) {
-      console.error("Failed to load products:", error);
+      console.error("Failed to load cart:", error);
     }
   };
 
   useEffect(() => {
     loadCart();
-    loadProducts();
   }, []);
 
   return (
@@ -61,13 +55,13 @@ useEffect(() => {
       <Route path="/signup" element={<Signup />} />
 
       <Route
-        index
+        path="/"
         element={
           <HomePage
             cart={cart}
             loadCart={loadCart}
             wishlist={wishlist}
-      dispatch={dispatch}
+            dispatch={dispatch}
           />
         }
       />
@@ -91,18 +85,16 @@ useEffect(() => {
           />
         }
       />
-     
-  
 
-<Route
-  path="/wishlist"
-  element={
-    <Wishlist
-      wishlist={wishlist}
-      dispatch={dispatch}
-    />
-  }
-/>
+      <Route
+        path="/wishlist"
+        element={
+          <Wishlist
+            wishlist={wishlist}
+            dispatch={dispatch}
+          />
+        }
+      />
     </Routes>
   );
 }
