@@ -1,50 +1,79 @@
 
 import api from "../../api/axios";
-import dayjs from 'dayjs';
-import formatMoney from '../../utilis/Money.js';
+import dayjs from "dayjs";
+import formatMoney from "../../utilis/Money.js";
+import { useState } from "react";
 
-export default function DeliveryOptions({ cartItem, deliveryOptions, loadCart }) {
+export default function DeliveryOptions({
+  cartItem,
+  deliveryOptions,
+  loadCart
+}) {
+  const [updating, setUpdating] = useState(false);
+
+  const updateDeliveryOption = async (deliveryOptionId) => {
+    if (updating || deliveryOptionId === cartItem.deliveryOptionId) {
+      return;
+    }
+
+    try {
+      setUpdating(true);
+
+      await api.put(`/api/cart-items/${cartItem.productId}`, {
+        deliveryOptionId: deliveryOptionId,
+      });
+
+      await loadCart();
+    } catch (error) {
+      console.error("Error updating delivery option:", error);
+      alert("Unable to update delivery option. Please try again.");
+    } finally {
+      setUpdating(false);
+    }
+  };
 
   return (
     <div className="delivery-options">
       <div className="delivery-options-title">
         Choose a delivery option:
       </div>
+
       {deliveryOptions.map((deliveryOption) => {
-
-        let priceString = 'FREE Shipping';
-        if (deliveryOption.priceCents > 0) {
-          priceString = `${formatMoney(deliveryOption.priceCents)} - Shipping`;
-        }
-    
-
-        const updateDeliveryOption = async (deliveryOptionId) => {
-          await api.put(`/api/cart-items/${cartItem.productId}`, {
-            deliveryOptionId,
-          });
-          await loadCart();
-        };
+        const priceString =
+          deliveryOption.priceCents > 0
+            ? `${formatMoney(deliveryOption.priceCents)} - Shipping`
+            : "FREE Shipping";
 
         return (
-          <div
+          <label
             key={deliveryOption.id}
             className="delivery-option"
-            onClick={() => updateDeliveryOption(deliveryOption.id)}
           >
             <input
               type="radio"
-              checked={deliveryOption.id === cartItem.deliveryOptionId}
-              onChange={() => {}}
-              className="delivery-option-input"
               name={`delivery-option-${cartItem.productId}`}
+              className="delivery-option-input"
+              checked={
+                deliveryOption.id === cartItem.deliveryOptionId
+              }
+              disabled={updating}
+              onChange={() =>
+                updateDeliveryOption(deliveryOption.id)
+              }
             />
+
             <div>
               <div className="delivery-option-date">
-                {dayjs(deliveryOption.estimatedDeliveryTimeMs).format('dddd, MMMM D')}
+                {dayjs(
+                  deliveryOption.estimatedDeliveryTimeMs
+                ).format("dddd, MMMM D")}
               </div>
-              <div className="delivery-option-price">{priceString}</div>
+
+              <div className="delivery-option-price">
+                {priceString}
+              </div>
             </div>
-          </div>
+          </label>
         );
       })}
     </div>
