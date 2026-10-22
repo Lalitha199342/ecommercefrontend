@@ -8,12 +8,13 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "http://localhost:3000",
+        target: "https://ecommercebackend-69tn.onrender.com/",
         changeOrigin: true,
+
       },
 
       "/images": {
-        target: "http://localhost:3000",
+        target: "https://ecommercebackend-69tn.onrender.com/",
         changeOrigin: true,
       },
     },
