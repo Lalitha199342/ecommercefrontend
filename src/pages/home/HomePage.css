@@ -1,0 +1,259 @@
+.home-page {
+  margin-top: 60px;
+}
+
+.home-page .products-grid {
+  display: grid;
+
+  /* - In CSS Grid, 1fr means a column will take up the
+       remaining space in the grid.
+     - If we write 1fr 1fr ... 1fr; 8 times, this will
+       divide the grid into 8 columns, each taking up an
+       equal amount of the space.
+     - repeat(8, 1fr); is a shortcut for repeating "1fr"
+       8 times (instead of typing out "1fr" 8 times).
+       repeat(...) is a special property that works with
+       display: grid; */
+  grid-template-columns: repeat(8, 1fr);
+}
+
+/* @media is used to create responsive design (making the
+   website look good on any screen size). This @media
+   means when the screen width is 2000px or less, we
+   will divide the grid into 7 columns instead of 8. */
+@media (max-width: 2000px) {
+  .home-page .products-grid {
+    grid-template-columns: repeat(7, 1fr);
+  }
+}
+
+/* This @media means when the screen width is 1600px or
+   less, we will divide the grid into 6 columns. */
+@media (max-width: 1600px) {
+  .home-page .products-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+@media (max-width: 1300px) {
+  .home-page .products-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+@media (max-width: 1000px) {
+  .home-page .products-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 800px) {
+  .home-page .products-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 575px) {
+  .home-page .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 450px) {
+  .home-page .products-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.home-page .product-container {
+  padding-top: 40px;
+  padding-bottom: 25px;
+  padding-left: 25px;
+  padding-right: 25px;
+
+  border-right: 1px solid rgb(240, 240, 240);
+  border-bottom: 1px solid rgb(240, 240, 240);
+
+  display: flex;
+  flex-direction: column;
+}
+
+.home-page .product-image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 180px;
+  margin-bottom: 20px;
+}
+
+.home-page .product-image {
+  /* Images overflow the container by default. To prevent this, set
+     max-width and max-height to 100% to stay inside container. */
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 5px;
+}
+
+.home-page .product-name {
+  height: 40px;
+  margin-bottom: 5px;
+}
+
+.home-page .product-rating-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.home-page .product-rating-stars {
+  width: 100px;
+  margin-right: 6px;
+}
+
+.home-page .product-rating-count {
+  color: rgb(25, 135, 84);
+  cursor: auto;
+  margin-top: 3px;
+}
+
+.home-page .product-price {
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.home-page .product-quantity-container {
+  margin-bottom: 17px;
+}
+
+.home-page .product-spacer {
+  flex: 1;
+}
+
+.home-page .added-to-cart {
+  color: rgb(25, 135, 84);
+  font-size: 16px;
+
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+
+  /* At first, the "Added to cart" message will
+     be invisible. Use JavaScript to change the
+     opacity and make it visible. */
+  opacity: 0;
+}
+
+.home-page .added-to-cart img {
+  height: 19px;
+  margin-right: 6px;
+}
+
+.home-page .add-to-cart-button {
+  width: 100%;
+  padding: 8px;
+  height: 34px;
+  margin-top: 1px;
+}
+
+.wishlist-btn {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px 12px;
+  border: 1px solid #e63946;
+  border-radius: 20px;
+  background-color: white;
+  color: #e63946;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+
+
+
+.wishlist-btn:hover {
+  background-color: #ffe5e9;
+}
+
+.wishlist-btn.active {
+  background-color: #ffe5e9;
+  color: #c1121f;
+  border-color: #c1121f;
+}
+
+.no-products {
+  text-align: center;
+  padding: 70px 20px;
+  color: var(--text-color, #333);
+}
+
+.no-products h2 {
+  font-size: 25px;
+  margin-bottom: 12px;
+}
+
+.no-products p {
+  font-size: 15px;
+  opacity: 0.75;
+}
+
+.header .search-bar {
+  width: 100%;
+  min-width: 0;
+  padding: 12px 15px;
+  border-radius: 6px 0 0 6px;
+  font-size: 15px;
+}
+
+/* LOADING */
+.loading-message {
+  text-align: center;
+  padding: 80px 20px;
+  color: var(--text-color, #333);
+}
+
+/* ERROR MESSAGE */
+.error-box {
+  max-width: 450px;
+  margin: 70px auto;
+  padding: 35px 25px;
+  text-align: center;
+  background: var(--card-bg, white);
+  color: var(--text-color, #222);
+  border: 1px solid #f1b6b6;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.error-box h2 {
+  color: #e63946;
+  margin-bottom: 15px;
+}
+
+.error-box p {
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+.error-box button {
+  background: #28865a;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 7px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.error-box button:hover {
+  background: #206b48;
+}
+
+/* NO SEARCH RESULTS */
+.no-products {
+  text-align: center;
+  padding: 80px 20px;
+  color: var(--text-color, #333);
+}
